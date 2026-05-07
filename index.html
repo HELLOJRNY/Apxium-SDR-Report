@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Recursive:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --gold: #FFBF00;
@@ -124,7 +125,8 @@
     .perf-badge.muted { background: rgba(34,31,32,0.1); }
     .perf-title { font-weight: 900; font-size: clamp(22px,2.5vw,28px); color: var(--dark); margin-bottom: 28px; line-height: 1.2; }
     .metric-row { margin-bottom: 18px; }
-    .metric-row-header { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .metric-row-header { display: flex; justify-content: space-between; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; min-height: 20px; }
+    .metric-row-header span:first-child { line-height: 1.35; }
     .metric-row-sub { font-size: 11px; color: rgba(34,31,32,0.4); margin-top: 4px; }
     .bar-track { height: 9px; background: rgba(34,31,32,0.08); border-radius: 99px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 99px; width: 0; transition: width 1.4s cubic-bezier(0.4,0,0.2,1); }
@@ -139,9 +141,9 @@
     .chart-label { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(34,31,32,0.35); margin-bottom: 16px; }
 
     /* ── WEEK CARDS ── */
-    .weeks-section { background: var(--dark); padding: 0 32px; }
-    .weeks-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-    .week-card { background: var(--white); border-radius: 20px; padding: 28px 26px; border-left: 5px solid var(--gold); transition: transform 0.22s ease, box-shadow 0.22s ease; }
+    .weeks-section { background: var(--dark); padding-left: 32px; padding-right: 32px; }
+    .weeks-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 32px; align-items: start; }
+    .week-card { background: var(--white); border-radius: 20px; padding: 24px 22px; border-left: 5px solid var(--gold); transition: transform 0.22s ease, box-shadow 0.22s ease; }
     .week-card.muted { border-left-color: rgba(34,31,32,0.2); }
     .week-card:hover { transform: translateY(-4px); box-shadow: 0 18px 44px rgba(34,31,32,0.12); }
     .week-badge { display: inline-block; font-weight: 800; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); background: var(--gold); border-radius: 7px; padding: 3px 10px; margin-bottom: 14px; }
@@ -155,6 +157,15 @@
     .week-mini-num { font-weight: 900; font-size: 24px; color: var(--dark); line-height: 1; }
     .week-mini-num.danger-text { color: var(--red); }
     .week-mini-lbl { font-size: 10px; font-weight: 700; color: rgba(34,31,32,0.4); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 3px; }
+    .week-notes { margin-top: 18px; border-top: 1px solid rgba(34,31,32,0.08); padding-top: 14px; display: flex; flex-direction: column; gap: 12px; }
+    .week-notes-block-label { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
+    .week-notes-block-label.key { color: var(--dark); }
+    .week-notes-block-label.steps { color: rgba(34,31,32,0.35); }
+    .week-notes-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+    .week-notes-list li { font-size: 12px; line-height: 1.6; color: rgba(34,31,32,0.65); padding-left: 14px; position: relative; }
+    .week-notes-list li::before { content: '·'; position: absolute; left: 2px; color: var(--gold); font-weight: 900; font-size: 14px; line-height: 1.3; }
+    .week-notes-list.steps li::before { content: '→'; font-size: 11px; line-height: 1.5; }
+    .week-notes-list li strong { color: var(--dark); font-weight: 700; }
 
     /* ── TABLE ── */
     .table-section { background: var(--white); padding: 72px 32px; }
@@ -212,8 +223,21 @@
     .chip-journey { background: rgba(34,31,32,0.08); color: rgba(34,31,32,0.55); }
     .action-item { display: flex; align-items: flex-start; gap: 12px; padding: 13px 0; border-bottom: 1px solid rgba(34,31,32,0.06); }
     .action-item:last-child { border-bottom: none; }
-    .action-box { width: 19px; height: 19px; border: 2px solid rgba(34,31,32,0.18); border-radius: 5px; flex-shrink: 0; margin-top: 2px; }
+    .action-box { width: 19px; height: 19px; border: 2px solid rgba(34,31,32,0.18); border-radius: 5px; flex-shrink: 0; margin-top: 2px; cursor: pointer; transition: border-color 0.15s, background 0.15s; display: flex; align-items: center; justify-content: center; }
+    .action-box:hover { border-color: var(--gold); }
+    .action-box::after { content: ''; display: none; }
+    .action-item.checked .action-box { background: var(--gold); border-color: var(--gold); }
+    .action-item.checked .action-box::after { content: '✓'; display: block; font-size: 11px; font-weight: 900; color: var(--dark); line-height: 1; }
+    .action-item.checked .action-text { text-decoration: line-through; color: rgba(34,31,32,0.3); }
+    .action-body { flex: 1; min-width: 0; }
     .action-text { font-size: 13px; color: var(--dark); line-height: 1.6; font-weight: 500; }
+    .action-note-btn { margin-top: 5px; display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: rgba(34,31,32,0.28); background: none; border: none; cursor: pointer; padding: 0; font-family: inherit; letter-spacing: 0.02em; transition: color 0.15s; }
+    .action-note-btn:hover { color: var(--dark); }
+    .action-note-btn.has-note { color: rgba(34,31,32,0.55); }
+    .action-note-wrap { margin-top: 8px; display: none; }
+    .action-note-wrap.open { display: block; }
+    .action-note-wrap textarea { width: 100%; border: 1.5px solid rgba(34,31,32,0.1); border-radius: 8px; padding: 8px 10px; font-family: 'Recursive', sans-serif; font-size: 12px; color: var(--dark); resize: none; min-height: 58px; background: rgba(34,31,32,0.02); outline: none; transition: border-color 0.15s; line-height: 1.6; }
+    .action-note-wrap textarea:focus { border-color: var(--gold); background: var(--white); }
 
     /* ── MILESTONES ── */
     .milestones-section { background: var(--dark); padding: 0 32px; }
@@ -555,16 +579,35 @@
       .stats-grid { grid-template-columns: repeat(2,1fr); }
       .stats-grid .stat-card:last-child { grid-column: span 2; }
       .perf-grid, .insights-grid, .actions-grid { grid-template-columns: 1fr; }
-      .weeks-grid, .milestones-grid, .script-compare { grid-template-columns: 1fr; }
+      .weeks-grid { grid-template-columns: 1fr; gap: 16px; margin-top: 24px; }
+      .milestones-grid, .script-compare { grid-template-columns: 1fr; }
       .objection-grid { grid-template-columns: 1fr; }
+      .week-card { padding: 20px 18px; border-radius: 16px; }
+      .week-card-title { font-size: 16px; margin-bottom: 8px; }
+      .week-card-body { font-size: 12px; margin-bottom: 16px; }
+      .week-mini-grid { gap: 6px; }
+      .week-mini-num { font-size: 20px; }
+      .week-mini-cell { padding: 8px 4px; }
+      .week-notes { margin-top: 14px; padding-top: 12px; gap: 10px; }
+      .week-notes-list li { font-size: 12px; }
+      .section-heading { font-size: clamp(24px,6vw,36px); }
       footer { padding: 28px 20px; }
       #comments-panel { width: 100%; top: auto; border-radius: 20px 20px 0 0; }
       .script-page, .agenda-page { padding: 40px 20px 64px; }
+      .hflow-split-row { grid-template-columns: 1fr; }
+      .hflow-split-row::before { display: none; }
+      .hflow-sub-split { grid-template-columns: 1fr; }
+      .hflow-sub-split::before { display: none; }
+      .hflow-outcomes { grid-template-columns: 1fr; gap: 8px; }
+      .hflow-node-center { max-width: 100%; }
     }
     @media (max-width: 480px) {
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .stat-number { font-size: 38px; }
-      .tab-btn { padding: 14px 14px; font-size: 12px; }
+      .tab-btn { padding: 14px 10px; font-size: 11px; }
+      .week-badge { font-size: 9px; }
+      .week-mini-num { font-size: 18px; }
+      .actions-grid { gap: 28px; }
     }
   </style>
 </head>
@@ -617,7 +660,7 @@
         <div class="hero-pill-dot"></div>
         <span class="hero-pill-text">6 April – 24 April 2026 &nbsp;·&nbsp; AU + US Campaigns</span>
       </div>
-      <p class="hero-sub"><strong>219 calls. 9 demos booked.</strong> One campaign outperforming — one that needs a rebuild. Here's everything you need to know, and what we're doing about it.</p>
+      <p class="hero-sub"><strong>219 calls. 9 demos booked.</strong> One campaign performing — one that needs a rebuild. Here's everything you need to know, and what we're doing about it.</p>
     </div>
   </section>
 
@@ -694,7 +737,7 @@
             <div class="bar-track"><div class="bar-fill bar-gold" data-width="22"></div></div>
           </div>
           <div class="metric-row">
-            <div class="metric-row-header"><span>Demo Conversion (of connected)</span><span>24%</span></div>
+            <div class="metric-row-header"><span>Demo Conversion</span><span>24%</span></div>
             <div class="bar-track"><div class="bar-fill bar-gold" data-width="24"></div></div>
           </div>
           <div class="metric-row">
@@ -752,6 +795,24 @@
             <div class="week-mini-cell"><div class="week-mini-num">0</div><div class="week-mini-lbl">Connected</div></div>
             <div class="week-mini-cell highlight"><div class="week-mini-num">8</div><div class="week-mini-lbl">Demos</div></div>
           </div>
+          <div class="week-notes">
+            <div>
+              <div class="week-notes-block-label key">Key Notes</div>
+              <ul class="week-notes-list">
+                <li>All 8 appointments came from contacts already familiar with Apxium — warmer conversations and noticeably higher conversion rate</li>
+                <li><strong>Primary blocker:</strong> Significant proportion of leads had no contact number on file, limiting overall reach</li>
+                <li>HubSpot connection tracking not yet configured — being resolved ahead of Week 2</li>
+              </ul>
+            </div>
+            <div>
+              <div class="week-notes-block-label steps">Next Steps</div>
+              <ul class="week-notes-list steps">
+                <li>Configure HubSpot to track calls connected</li>
+                <li>Continue ABE follow-up calls with enriched contact data</li>
+                <li>Begin US Lower Revenue Firms list in parallel</li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="week-card reveal reveal-d1">
           <span class="week-badge">Week 2 &nbsp;·&nbsp; 13–16 Apr</span>
@@ -762,6 +823,25 @@
             <div class="week-mini-cell"><div class="week-mini-num">37</div><div class="week-mini-lbl">Connected</div></div>
             <div class="week-mini-cell highlight"><div class="week-mini-num">18</div><div class="week-mini-lbl">Deferred</div></div>
           </div>
+          <div class="week-notes">
+            <div>
+              <div class="week-notes-block-label key">Key Notes</div>
+              <ul class="week-notes-list">
+                <li><strong>Standout booking:</strong> Wealthcrest — strong alignment between their services and Apxium's value proposition</li>
+                <li><strong>Primary blocker:</strong> May 15 tax deadline — 18 deferrals are timing-related, not a rejection of the product. Warm pipeline to re-engage early June</li>
+                <li>19 not interested — no specific objection captured in most cases; objection logging to be added to script</li>
+                <li>Strong overall reception to product messaging; conversations have helped sharpen positioning</li>
+              </ul>
+            </div>
+            <div>
+              <div class="week-notes-block-label steps">Next Steps</div>
+              <ul class="week-notes-list steps">
+                <li>Tag all 18 post-deadline contacts in HubSpot with a June re-engagement date</li>
+                <li>Pause further ABE call attempts; schedule re-engagement for early–mid June</li>
+                <li>Conduct messaging review — assess what resonated vs. what didn't before the June cycle</li>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="week-card muted reveal reveal-d2">
           <span class="week-badge muted">Week 2 &nbsp;·&nbsp; 13–16 Apr</span>
@@ -771,6 +851,27 @@
             <div class="week-mini-cell"><div class="week-mini-num">48</div><div class="week-mini-lbl">Calls</div></div>
             <div class="week-mini-cell"><div class="week-mini-num">10</div><div class="week-mini-lbl">Connected</div></div>
             <div class="week-mini-cell danger"><div class="week-mini-num danger-text">0</div><div class="week-mini-lbl">Demos</div></div>
+          </div>
+          <div class="week-notes">
+            <div>
+              <div class="week-notes-block-label key">Key Notes</div>
+              <ul class="week-notes-list">
+                <li>First run at the US market — early signals only, limited feedback volume</li>
+                <li>Multiple prospects unfamiliar with Apxium — clear need for brand awareness before outreach resumes</li>
+                <li>4 callback requests are the only positive signals; 6 hang-ups indicate cold contact without prior familiarity</li>
+                <li><strong>Current blocker:</strong> SDR team has exhausted the existing call list — new list required urgently. Next list should target lower-end mid-tier or higher-end lower-tier US firms while the script is refined. Top 500 firms require a separate tailored dialogue and verified contact data before calling</li>
+              </ul>
+            </div>
+            <div>
+              <div class="week-notes-block-label steps">Next Steps</div>
+              <ul class="week-notes-list steps">
+                <li>Confirm next call list — target lower-end mid-tier or higher-end lower-tier US firms while the script is being refined (fewer gatekeepers, more accessible)</li>
+                <li>Top 500 firms to be held until a separate dialogue and fully verified contact data are in place</li>
+                <li>Review and localise US script — remove AU-specific references, add US proof points</li>
+                <li>Consider supporting US campaign with brand awareness / marketing activity</li>
+                <li>Follow up with 4 callback-requested contacts once new list is confirmed</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -848,7 +949,7 @@
             </div>
             <div class="insight-card not-working">
               <div class="insight-icon">✗</div>
-              <div><div class="insight-title">US Top 500 list is firm-level, not office-level</div><div class="insight-body">Multi-office firms require office-level records to navigate IVR and gatekeepers — a structural barrier before the conversation starts.</div></div>
+              <div><div class="insight-title">US Top 500 needs a different approach entirely</div><div class="insight-body">Large multi-office firms require a tailored dialogue, verified contact data, and office-level records. The current script and list structure isn't built for them yet.</div></div>
             </div>
             <div class="insight-card not-working">
               <div class="insight-icon">✗</div>
@@ -886,12 +987,13 @@
       <p style="font-size:12px;font-weight:700;color:rgba(34,31,32,0.35);letter-spacing:0.08em;text-transform:uppercase;">Highest impact first</p>
       <div class="recs-list">
         <div class="rec-card reveal"><div class="rec-num">01</div><div><span class="rec-priority priority-high">Urgent</span><div class="rec-title">Fix the US script before next cycle</div><div class="rec-body">Remove all AU-specific references (ASIC compliance, ABE conference). Add US-relevant proof points. Soften the CTA — US prospects need brand familiarity before a hard close.</div></div></div>
-        <div class="rec-card reveal reveal-d1"><div class="rec-num">02</div><div><span class="rec-priority priority-high">Urgent</span><div class="rec-title">Rebuild the US Top 500 list at office level</div><div class="rec-body">Restructure from firm-level to individual office contacts — target 50–100 firms with 3–5 offices each. Removes the IVR/gatekeeper barrier for multi-office organisations.</div></div></div>
-        <div class="rec-card reveal reveal-d2"><div class="rec-num">03</div><div><span class="rec-priority priority-high">High Priority</span><div class="rec-title">Build June re-engagement sequence for 18 deferred AU contacts</div><div class="rec-body">These 18 contacts explicitly asked to be called back after May 15. Tag them in HubSpot now and treat this as the highest-probability pipeline in the next cycle.</div></div></div>
-        <div class="rec-card reveal"><div class="rec-num">04</div><div><span class="rec-priority priority-med">Medium</span><div class="rec-title">Add an objection capture step to the script</div><div class="rec-body">Before accepting "not interested," probe with one question — e.g., "Is it a timing thing, or more about the solution?" Even a single-word tag per outcome gives us iteration data.</div></div></div>
-        <div class="rec-card reveal reveal-d1"><div class="rec-num">05</div><div><span class="rec-priority priority-med">Medium</span><div class="rec-title">Close the demo-to-sales-meeting conversion gap</div><div class="rec-body">9 demos booked, outcome TBC. Confirm which converted before the next cycle starts — critical for reporting true campaign ROI.</div></div></div>
-        <div class="rec-card reveal reveal-d2"><div class="rec-num">06</div><div><span class="rec-priority priority-med">Medium</span><div class="rec-title">Enrich HubSpot contact data before next campaign</div><div class="rec-body">Week 1 AU was hampered by missing phone numbers. A data enrichment pass — direct numbers, verified emails, firm size — should be treated as a prerequisite, not optional.</div></div></div>
-        <div class="rec-card reveal"><div class="rec-num">07</div><div><span class="rec-priority priority-low">Ongoing</span><div class="rec-title">Establish a weekly script review rhythm</div><div class="rec-body">30-minute weekly sessions with SDR + Journey + Apxium. Review what landed, what was objected to, and what needs updating. Treat the script as a living document.</div></div></div>
+        <div class="rec-card reveal reveal-d1"><div class="rec-num">02</div><div><span class="rec-priority priority-high">Urgent</span><div class="rec-title">Target lower-end mid-tier US firms while the script is refined</div><div class="rec-body">While the script is being rebuilt, call into lower-end mid-tier or higher-end lower-tier US firms — smaller, more accessible, fewer gatekeepers. This keeps momentum without burning a harder-to-reach audience on an unready script.</div></div></div>
+        <div class="rec-card reveal reveal-d2"><div class="rec-num">03</div><div><span class="rec-priority priority-high">Urgent</span><div class="rec-title">Hold on the Top 500 — build the right foundation first</div><div class="rec-body">The Top 500 requires a completely different approach. These firms are multi-office, heavily gatekept, and need office-level contact records, a tailored dialogue, and US-specific proof points before any calls are made. Don't approach them with the current script or list structure — build the right setup first, then re-approach as a separate campaign.</div></div></div>
+        <div class="rec-card reveal"><div class="rec-num">04</div><div><span class="rec-priority priority-high">High Priority</span><div class="rec-title">Build June re-engagement sequence for 18 deferred AU contacts</div><div class="rec-body">These 18 contacts explicitly asked to be called back after May 15. Tag them in HubSpot now and treat this as the highest-probability pipeline in the next cycle.</div></div></div>
+        <div class="rec-card reveal reveal-d1"><div class="rec-num">05</div><div><span class="rec-priority priority-med">Medium</span><div class="rec-title">Add an objection capture step to the script</div><div class="rec-body">Before accepting "not interested," probe with one question — e.g., "Is it a timing thing, or more about the solution?" Even a single-word tag per outcome gives us iteration data.</div></div></div>
+        <div class="rec-card reveal reveal-d2"><div class="rec-num">06</div><div><span class="rec-priority priority-med">Medium</span><div class="rec-title">Close the demo-to-sales-meeting conversion gap</div><div class="rec-body">9 demos booked, outcome TBC. Confirm which converted before the next cycle starts — critical for reporting true campaign ROI.</div></div></div>
+        <div class="rec-card reveal"><div class="rec-num">07</div><div><span class="rec-priority priority-med">Medium</span><div class="rec-title">Enrich HubSpot contact data before next campaign</div><div class="rec-body">Week 1 AU was hampered by missing phone numbers. A data enrichment pass — direct numbers, verified emails, firm size — should be treated as a prerequisite, not optional.</div></div></div>
+        <div class="rec-card reveal reveal-d1"><div class="rec-num">08</div><div><span class="rec-priority priority-low">Ongoing</span><div class="rec-title">Two-touch weekly review rhythm</div><div class="rec-body">15-min mid-week check-in to review dialogue and live call feedback. 30-min end-of-week session to assess results and update the script. First session 30 mins to set the baseline — then 15-min check-ins from there. Treat the script as a living document.</div></div></div>
       </div>
     </div>
   </section>
@@ -913,21 +1015,21 @@
         <div class="reveal">
           <div class="actions-col-head"><span class="actions-col-title">Apxium</span><span class="owner-chip chip-apxium">Owner</span></div>
           <div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Confirm which of the 9 booked demos converted to sales meetings</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Provide next US mid-tier call list (Gabor) for the next SDR cycle</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Tag the 18 deferred AU contacts in HubSpot for June re-engagement</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Provide US proof points and localised messaging for script rebuild</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Review what resonated specifically in the ABE conference messaging</div></div>
+            <div class="action-item" data-id="act_a1"><div class="action-box" onclick="toggleAction('act_a1')"></div><div class="action-body"><div class="action-text">Confirm which of the 9 booked demos converted to sales meetings</div><button class="action-note-btn" data-note-btn="act_a1" onclick="toggleNote('act_a1')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_a1"><textarea placeholder="Add a note…" oninput="saveNote('act_a1', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_a2"><div class="action-box" onclick="toggleAction('act_a2')"></div><div class="action-body"><div class="action-text">Provide next US call list — lower-end mid-tier or higher-end lower-tier firms for script testing (Top 500 on hold until separate dialogue + verified data in place)</div><button class="action-note-btn" data-note-btn="act_a2" onclick="toggleNote('act_a2')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_a2"><textarea placeholder="Add a note…" oninput="saveNote('act_a2', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_a3"><div class="action-box" onclick="toggleAction('act_a3')"></div><div class="action-body"><div class="action-text">Tag the 18 deferred AU contacts in HubSpot for June re-engagement</div><button class="action-note-btn" data-note-btn="act_a3" onclick="toggleNote('act_a3')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_a3"><textarea placeholder="Add a note…" oninput="saveNote('act_a3', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_a4"><div class="action-box" onclick="toggleAction('act_a4')"></div><div class="action-body"><div class="action-text">Provide US proof points and localised messaging for script rebuild</div><button class="action-note-btn" data-note-btn="act_a4" onclick="toggleNote('act_a4')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_a4"><textarea placeholder="Add a note…" oninput="saveNote('act_a4', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_a5"><div class="action-box" onclick="toggleAction('act_a5')"></div><div class="action-body"><div class="action-text">Review what resonated specifically in the ABE conference messaging</div><button class="action-note-btn" data-note-btn="act_a5" onclick="toggleNote('act_a5')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_a5"><textarea placeholder="Add a note…" oninput="saveNote('act_a5', this.value)"></textarea></div></div></div>
           </div>
         </div>
         <div class="reveal reveal-d1">
           <div class="actions-col-head"><span class="actions-col-title">Journey SDR Team</span><span class="owner-chip chip-journey">Owner</span></div>
           <div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Re-engage the 18 deferred AU contacts from early-mid June 2026</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Continue US calls once new list is confirmed from Apxium</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Conduct full data enrichment audit on HubSpot contact list</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Rebuild US script with localised copy before next call cycle</div></div>
-            <div class="action-item"><div class="action-box"></div><div class="action-text">Establish weekly 30-minute script review sessions</div></div>
+            <div class="action-item" data-id="act_j1"><div class="action-box" onclick="toggleAction('act_j1')"></div><div class="action-body"><div class="action-text">Re-engage the 18 deferred AU contacts from early-mid June 2026</div><button class="action-note-btn" data-note-btn="act_j1" onclick="toggleNote('act_j1')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_j1"><textarea placeholder="Add a note…" oninput="saveNote('act_j1', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_j2"><div class="action-box" onclick="toggleAction('act_j2')"></div><div class="action-body"><div class="action-text">Continue US calls once new list is confirmed from Apxium</div><button class="action-note-btn" data-note-btn="act_j2" onclick="toggleNote('act_j2')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_j2"><textarea placeholder="Add a note…" oninput="saveNote('act_j2', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_j3"><div class="action-box" onclick="toggleAction('act_j3')"></div><div class="action-body"><div class="action-text">Conduct full data enrichment audit on HubSpot contact list</div><button class="action-note-btn" data-note-btn="act_j3" onclick="toggleNote('act_j3')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_j3"><textarea placeholder="Add a note…" oninput="saveNote('act_j3', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_j4"><div class="action-box" onclick="toggleAction('act_j4')"></div><div class="action-body"><div class="action-text">Rebuild US script with localised copy before next call cycle</div><button class="action-note-btn" data-note-btn="act_j4" onclick="toggleNote('act_j4')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_j4"><textarea placeholder="Add a note…" oninput="saveNote('act_j4', this.value)"></textarea></div></div></div>
+            <div class="action-item" data-id="act_j5"><div class="action-box" onclick="toggleAction('act_j5')"></div><div class="action-body"><div class="action-text">Set up weekly review rhythm — 15-min mid-week dialogue check-in + 30-min end-of-week session (first session 30 mins to set baseline)</div><button class="action-note-btn" data-note-btn="act_j5" onclick="toggleNote('act_j5')">＋ note</button><div class="action-note-wrap" id="note_wrap_act_j5"><textarea placeholder="Add a note…" oninput="saveNote('act_j5', this.value)"></textarea></div></div></div>
           </div>
         </div>
       </div>
@@ -950,13 +1052,13 @@
           <div class="milestone-icon">🔧</div>
           <div class="milestone-date">Before Next US Cycle</div>
           <div class="milestone-title">US Rebuild</div>
-          <div class="milestone-body">Localise the script, rebuild the Top 500 list at office level, confirm new mid-tier call list from Apxium (Gabor). No US calls until these prerequisites are in place.</div>
+          <div class="milestone-body">Localise the US script, confirm next lower-end mid-tier call list from Apxium. Top 500 firms on hold — requires a separate tailored dialogue and fully verified contact data before calling resumes.</div>
         </div>
         <div class="milestone-card reveal reveal-d2">
           <div class="milestone-icon">🔄</div>
           <div class="milestone-date">Ongoing — Starting Now</div>
           <div class="milestone-title">Weekly Script Review</div>
-          <div class="milestone-body">30-minute weekly rhythm: SDR + Journey + Apxium. Iterate on objection handling and proof points. The script is a living document — iteration is the strategy.</div>
+          <div class="milestone-body">15-min mid-week dialogue check-in + 30-min end-of-week session: SDR + Journey + Apxium. First session 30 mins to set the baseline. Iterate on objection handling and proof points — the script is a living document.</div>
         </div>
       </div>
     </div>
@@ -1311,7 +1413,7 @@
         <div class="issue-row"><div class="issue-row-icon">🔴</div><div class="issue-row-text"><strong>Remove ABE references.</strong> ABE is an AU-specific conference. US prospects have no context for this and it makes the intro feel off. Replace with a credibility-first opener.</div></div>
         <div class="issue-row"><div class="issue-row-icon">🟡</div><div class="issue-row-text"><strong>Add US proof points.</strong> Apxium needs at least 1–2 US firm references or US-relevant statistics before this script can convert. If none exist yet, use anonymised data or industry benchmarks.</div></div>
         <div class="issue-row"><div class="issue-row-icon">🟡</div><div class="issue-row-text"><strong>Soften the CTA.</strong> A direct demo ask on a cold call to a US firm with zero brand awareness is too aggressive. Intermediate step (send a resource, offer a brief intro call) will get more traction.</div></div>
-        <div class="issue-row"><div class="issue-row-icon">🟡</div><div class="issue-row-text"><strong>Rebuild the list at office level.</strong> The Top 500 list is at firm level, meaning SDRs can't navigate the IVR/gatekeeper for multi-office organisations. Office-level records are required before calling resumes.</div></div>
+        <div class="issue-row"><div class="issue-row-icon">🟡</div><div class="issue-row-text"><strong>Top 500 requires a completely different approach.</strong> These firms need a tailored dialogue, fully verified contact data, and office-level records. Don't call them with the current script — build the right setup first, then re-approach.</div></div>
       </div>
 
     </div>
@@ -1372,7 +1474,7 @@
             <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Review US campaign performance — 48 calls, 10 connected, 0 demos booked</div></div>
             <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Diagnose script issues: AU-specific references (ASIC/ABE) not resonating in US</div></div>
             <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Confirm US proof points Apxium can provide for script localisation</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Align on next US call list — confirm with Gabor (mid-tier firm contacts)</div></div>
+            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Align on next US call list — lower-end mid-tier or higher-end lower-tier firms for script testing (Top 500 on hold pending tailored dialogue + verified data)</div></div>
             <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Rebuild timeline: when will new list + localised script be ready?</div></div>
             <div style="margin-top:16px;padding:14px 16px;background:rgba(34,31,32,0.04);border-radius:10px;border: 1px solid rgba(34,31,32,0.08);">
               <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(34,31,32,0.4);margin-bottom:8px;">Sub-topic</div>
@@ -1518,33 +1620,169 @@
     }
   });
 
-  // ── COMMENT SYSTEM ─────────────────
-  const STORAGE_KEY = 'apxium_report_comments_v1';
+  // ── COMMENT SYSTEM (Supabase — shared across all viewers) ───────────────────
+  //
+  // SETUP: https://supabase.com → New project → SQL Editor → run:
+  //   CREATE TABLE comments (
+  //     id text PRIMARY KEY, selected_text text, comment text,
+  //     time text, created_at timestamptz DEFAULT now()
+  //   );
+  //   ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
+  //   CREATE POLICY "public_access" ON comments FOR ALL USING (true) WITH CHECK (true);
+  //
+  // Then Settings → API → paste your URL and anon key below:
+  //
+  const SUPABASE_URL  = 'https://ajbfesbmakkaaeawqvvre.supabase.co';
+  const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqYmZlc2JtYWtrYWVhd3F2dnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxMDUwNzYsImV4cCI6MjA5MzY4MTA3Nn0.jGbHUii2jW5d36mr54gADBEUrVW_m1SMsMd6ANZ1eME';
+  const NOTIFY_EMAIL  = 'kc@letsjourney.io';
+  const FALLBACK_KEY  = 'apxium_report_comments_v1';
 
-  function loadComments() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
-    catch(e) { return []; }
-  }
-  function saveComments(comments) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
-  }
+  // Init Supabase — graceful fallback to localStorage if not configured
+  let _sb = null;
+  try {
+    if (SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+      _sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    }
+  } catch(e) { _sb = null; }
 
+  let _liveComments = [];
   let _pendingRange = null;
   let _pendingText  = '';
 
   const tooltip = document.getElementById('comment-tooltip');
 
-  // Show tooltip near selection
-  document.addEventListener('mouseup', (e) => {
-    // Don't trigger inside the modal or panel
-    if (e.target.closest('#comment-modal-overlay') || e.target.closest('#comments-panel')) return;
+  // ── Helpers ──
+  function attachMarkListener(mark, id) {
+    mark.addEventListener('click', () => {
+      openCommentsPanel();
+      setTimeout(() => {
+        const el = document.querySelector('[data-entry-id="' + id + '"]');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 350);
+    });
+  }
 
+  function restoreHighlights(comments) {
+    if (!comments.length) return;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        const p = node.parentElement;
+        if (!p) return NodeFilter.FILTER_REJECT;
+        if (['SCRIPT','STYLE','MARK','TEXTAREA','INPUT'].includes(p.tagName)) return NodeFilter.FILTER_REJECT;
+        if (p.closest('#comments-panel,#comment-modal-overlay,#comment-tooltip,nav')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    let nodes = [], offsets = [], combined = '', n;
+    while ((n = walker.nextNode())) { offsets.push(combined.length); combined += n.textContent; nodes.push(n); }
+
+    comments.forEach(c => {
+      if (document.querySelector('mark[data-id="' + c.id + '"]')) return;
+      const needle = (c.selected_text || c.selectedText || '').replace(/…$/, '').trim().slice(0, 100);
+      if (needle.length < 3) return;
+      const idx = combined.indexOf(needle);
+      if (idx === -1) return;
+      let si = 0; for (let i = offsets.length-1; i >= 0; i--) { if (offsets[i] <= idx) { si = i; break; } }
+      const endIdx = idx + needle.length;
+      let ei = 0; for (let i = offsets.length-1; i >= 0; i--) { if (offsets[i] <= endIdx) { ei = i; break; } }
+      try {
+        const range = document.createRange();
+        range.setStart(nodes[si], Math.min(idx - offsets[si], nodes[si].textContent.length));
+        range.setEnd(nodes[ei], Math.min(endIdx - offsets[ei], nodes[ei].textContent.length));
+        const mark = document.createElement('mark');
+        mark.className = 'comment-highlight';
+        mark.dataset.id = c.id;
+        range.surroundContents(mark);
+        attachMarkListener(mark, c.id);
+      } catch(e) {}
+    });
+  }
+
+  function removeMarkFromDOM(id) {
+    const mark = document.querySelector('mark[data-id="' + id + '"]');
+    if (mark) { const p = mark.parentNode; while (mark.firstChild) p.insertBefore(mark.firstChild, mark); p.removeChild(mark); }
+  }
+
+  // ── Render ──
+  function renderComments(comments) {
+    const list  = document.getElementById('comments-list');
+    const badge = document.getElementById('comments-fab-badge');
+    if (!comments.length) {
+      list.innerHTML = '<div class="comment-empty"><div class="comment-empty-icon">💬</div><div class="comment-empty-text">No comments yet.<br/>Highlight any text to leave a comment.</div></div>';
+      badge.style.display = 'none';
+      return;
+    }
+    badge.style.display = 'block';
+    badge.textContent = comments.length;
+    list.innerHTML = comments.map(c => `
+      <div class="comment-entry" data-entry-id="${c.id}">
+        <div class="comment-entry-quote">${c.selected_text || c.selectedText || ''}</div>
+        <div class="comment-entry-text">${c.comment}</div>
+        <div class="comment-entry-meta">
+          <span>${c.time}</span>
+          <button class="comment-entry-delete" onclick="resolveComment('${c.id}')">Mark Resolved</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // ── Resolve (delete) ──
+  function resolveComment(id) {
+    removeMarkFromDOM(id);
+    if (_sb) {
+      _sb.from('comments').delete().eq('id', id);
+    } else {
+      _liveComments = _liveComments.filter(c => c.id !== id);
+      localStorage.setItem(FALLBACK_KEY, JSON.stringify(_liveComments));
+      renderComments(_liveComments);
+    }
+  }
+
+  // ── Subscribe (Supabase real-time) or load from localStorage ──
+  async function initComments() {
+    if (_sb) {
+      // Initial load
+      const { data } = await _sb.from('comments').select('*').order('created_at', { ascending: true });
+      _liveComments = data || [];
+      renderComments(_liveComments);
+      restoreHighlights(_liveComments);
+
+      // Real-time subscription
+      _sb.channel('comments-changes')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, async () => {
+          const { data: fresh } = await _sb.from('comments').select('*').order('created_at', { ascending: true });
+          _liveComments = fresh || [];
+          renderComments(_liveComments);
+          restoreHighlights(_liveComments);
+        })
+        .subscribe();
+    } else {
+      try { _liveComments = JSON.parse(localStorage.getItem(FALLBACK_KEY)) || []; } catch(e) { _liveComments = []; }
+      renderComments(_liveComments);
+      restoreHighlights(_liveComments);
+    }
+  }
+
+  // ── Notify kc@letsjourney.io via FormSubmit ──
+  function notifyEmail(c) {
+    fetch('https://formsubmit.co/ajax/' + NOTIFY_EMAIL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        _subject: 'New comment — Apxium SDR Report',
+        Highlighted: c.selectedText,
+        Comment: c.comment,
+        Time: c.time
+      })
+    }).catch(() => {});
+  }
+
+  // ── Tooltip ──
+  document.addEventListener('mouseup', (e) => {
+    if (e.target.closest('#comment-modal-overlay') || e.target.closest('#comments-panel')) return;
     setTimeout(() => {
       const sel = window.getSelection();
-      if (!sel || sel.isCollapsed || sel.toString().trim().length < 3) {
-        tooltip.style.display = 'none';
-        return;
-      }
+      if (!sel || sel.isCollapsed || sel.toString().trim().length < 3) { tooltip.style.display = 'none'; return; }
       const range = sel.getRangeAt(0);
       const rect  = range.getBoundingClientRect();
       tooltip.style.display = 'block';
@@ -1555,17 +1793,12 @@
     }, 10);
   });
 
-  // Hide tooltip on click outside
-  document.addEventListener('mousedown', (e) => {
-    if (e.target !== tooltip) { tooltip.style.display = 'none'; }
-  });
+  document.addEventListener('mousedown', (e) => { if (e.target !== tooltip) tooltip.style.display = 'none'; });
 
-  // Tooltip click → open modal
   tooltip.addEventListener('click', () => {
     tooltip.style.display = 'none';
     if (!_pendingText) return;
-    const q = document.getElementById('comment-modal-quote');
-    q.textContent = '"' + (_pendingText.length > 120 ? _pendingText.slice(0, 120) + '…' : _pendingText) + '"';
+    document.getElementById('comment-modal-quote').textContent = '"' + (_pendingText.length > 120 ? _pendingText.slice(0, 120) + '…' : _pendingText) + '"';
     document.getElementById('comment-text').value = '';
     document.getElementById('comment-modal-overlay').classList.add('open');
     setTimeout(() => document.getElementById('comment-text').focus(), 100);
@@ -1573,92 +1806,99 @@
 
   function closeCommentModal() {
     document.getElementById('comment-modal-overlay').classList.remove('open');
-    _pendingRange = null;
-    _pendingText  = '';
+    _pendingRange = null; _pendingText = '';
     window.getSelection()?.removeAllRanges();
   }
 
+  // ── Submit ──
   function submitComment() {
     const text = document.getElementById('comment-text').value.trim();
     if (!text) { document.getElementById('comment-text').focus(); return; }
 
-    // Wrap selection in highlight mark
+    const commentId = 'c_' + Date.now();
     if (_pendingRange) {
       try {
         const mark = document.createElement('mark');
         mark.className = 'comment-highlight';
-        const id = 'c_' + Date.now();
-        mark.dataset.id = id;
+        mark.dataset.id = commentId;
         _pendingRange.surroundContents(mark);
-        mark.addEventListener('click', () => {
-          openCommentsPanel();
-          setTimeout(() => {
-            const entry = document.querySelector('[data-entry-id="' + id + '"]');
-            if (entry) entry.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }, 350);
-        });
-      } catch(e) { /* selection spans multiple nodes — skip marking, still save */ }
+        attachMarkListener(mark, commentId);
+      } catch(e) {}
     }
 
-    const comments = loadComments();
     const newComment = {
-      id: 'c_' + Date.now(),
+      id: commentId,
       selectedText: _pendingText.length > 160 ? _pendingText.slice(0, 160) + '…' : _pendingText,
       comment: text,
       time: new Date().toLocaleString('en-AU', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
     };
-    comments.push(newComment);
-    saveComments(comments);
-    renderComments();
+
+    if (_sb) {
+      _sb.from('comments').insert({ id: commentId, selected_text: newComment.selectedText, comment: newComment.comment, time: newComment.time });
+    } else {
+      _liveComments.push(newComment);
+      localStorage.setItem(FALLBACK_KEY, JSON.stringify(_liveComments));
+      renderComments(_liveComments);
+    }
+
+    notifyEmail(newComment);
     closeCommentModal();
     openCommentsPanel();
-  }
-
-  function deleteComment(id) {
-    const comments = loadComments().filter(c => c.id !== id);
-    saveComments(comments);
-    // remove highlight mark if present
-    const mark = document.querySelector('mark[data-id="' + id + '"]');
-    if (mark) {
-      const parent = mark.parentNode;
-      while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
-      parent.removeChild(mark);
-    }
-    renderComments();
-  }
-
-  function renderComments() {
-    const comments = loadComments();
-    const list  = document.getElementById('comments-list');
-    const badge = document.getElementById('comments-fab-badge');
-
-    if (comments.length === 0) {
-      list.innerHTML = '<div class="comment-empty"><div class="comment-empty-icon">💬</div><div class="comment-empty-text">No comments yet.<br/>Highlight any text to leave a comment.</div></div>';
-      badge.style.display = 'none';
-      return;
-    }
-
-    badge.style.display = 'block';
-    badge.textContent = comments.length;
-
-    list.innerHTML = comments.map(c => `
-      <div class="comment-entry" data-entry-id="${c.id}">
-        <div class="comment-entry-quote">${c.selectedText}</div>
-        <div class="comment-entry-text">${c.comment}</div>
-        <div class="comment-entry-meta">
-          <span>${c.time}</span>
-          <button class="comment-entry-delete" onclick="deleteComment('${c.id}')">Delete</button>
-        </div>
-      </div>
-    `).join('');
   }
 
   function openCommentsPanel()  { document.getElementById('comments-panel').classList.add('open'); }
   function closeCommentsPanel() { document.getElementById('comments-panel').classList.remove('open'); }
   function toggleCommentsPanel() { document.getElementById('comments-panel').classList.toggle('open'); }
 
+  // ── OPEN ACTIONS ──────────────────────
+  const ACTIONS_KEY = 'apxium_actions_v1';
+  function loadActionData() { try { return JSON.parse(localStorage.getItem(ACTIONS_KEY)) || {}; } catch { return {}; } }
+  function saveActionData(d) { localStorage.setItem(ACTIONS_KEY, JSON.stringify(d)); }
+
+  function toggleAction(id) {
+    const d = loadActionData();
+    d[id] = d[id] || {};
+    d[id].checked = !d[id].checked;
+    saveActionData(d);
+    applyActionState(id, d[id]);
+  }
+
+  function toggleNote(id) {
+    const wrap = document.getElementById('note_wrap_' + id);
+    if (!wrap) return;
+    wrap.classList.toggle('open');
+    if (wrap.classList.contains('open')) wrap.querySelector('textarea').focus();
+  }
+
+  function saveNote(id, value) {
+    const d = loadActionData();
+    d[id] = d[id] || {};
+    d[id].note = value;
+    saveActionData(d);
+    const btn = document.querySelector('[data-note-btn="' + id + '"]');
+    if (btn) { btn.classList.toggle('has-note', !!value.trim()); btn.textContent = value.trim() ? '✎ note' : '＋ note'; }
+  }
+
+  function applyActionState(id, state) {
+    const item = document.querySelector('[data-id="' + id + '"]');
+    if (!item) return;
+    item.classList.toggle('checked', !!state.checked);
+    if (state.note) {
+      const wrap = document.getElementById('note_wrap_' + id);
+      if (wrap) wrap.querySelector('textarea').value = state.note;
+      const btn = document.querySelector('[data-note-btn="' + id + '"]');
+      if (btn) { btn.classList.add('has-note'); btn.textContent = '✎ note'; }
+    }
+  }
+
+  // Restore saved action states on load
+  (function initActions() {
+    const d = loadActionData();
+    Object.keys(d).forEach(id => applyActionState(id, d[id]));
+  })();
+
   // Init on load
-  renderComments();
+  initComments();
 </script>
 </body>
 </html>
