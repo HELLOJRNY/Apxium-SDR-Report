@@ -172,7 +172,7 @@
     .td-label { font-size: 11px; color: rgba(34,31,32,0.35); font-weight: 500; display: block; margin-top: 2px; }
 
     /* ── INSIGHTS ── */
-    .insights-section { background: var(--dark); padding: 0 32px; }
+    .insights-section { background: var(--dark); padding-left: 32px; padding-right: 32px; }
     .insights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
     .insights-col-heading { font-weight: 900; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px; }
     .insights-col-heading.working-color { color: #4ADE80; }
@@ -291,6 +291,54 @@
     /* Script issues summary */
     .issues-summary { background: var(--white); border-radius: 16px; border: 1px solid rgba(220,38,38,0.2); padding: 28px; margin-top: 32px; box-shadow: 0 4px 20px rgba(34,31,32,0.07); }
     .issues-summary-title { font-weight: 900; font-size: 16px; color: var(--dark); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+
+    /* ── HIGH LEVEL CALL FLOW ── */
+    .hflow-section { margin-bottom: 52px; }
+    .hflow-section h2 { font-weight: 900; font-size: clamp(22px,3vw,32px); color: var(--dark); letter-spacing: -0.02em; margin-bottom: 8px; }
+    .hflow-section > p { font-size: 14px; color: rgba(34,31,32,0.55); line-height: 1.6; margin-bottom: 32px; }
+    .hflow-diagram { display: flex; flex-direction: column; align-items: center; }
+    .hflow-node-center { width: 100%; max-width: 560px; background: var(--white); border: 1.5px solid rgba(34,31,32,0.1); border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(34,31,32,0.05); }
+    .hflow-node-opening { border-left: 4px solid var(--gold); }
+    .hflow-node-position { border-left: 4px solid var(--gold); background: rgba(255,191,0,0.05); }
+    .hflow-node-qual { border-left: 4px solid rgba(34,31,32,0.2); }
+    .hflow-node-close { border-left: 4px solid var(--gold); background: var(--dark); }
+    .hflow-node-close .hflow-tag { color: var(--gold) !important; }
+    .hflow-node-close .hflow-node-quote { color: var(--white); }
+    .hflow-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(34,31,32,0.4); margin-bottom: 6px; }
+    .hflow-tag-gold { color: var(--dark); background: var(--gold); display: inline-block; padding: 2px 8px; border-radius: 4px; }
+    .hflow-node-quote { font-size: 13px; font-style: italic; color: rgba(34,31,32,0.75); line-height: 1.6; }
+    .hflow-connector { width: 2px; background: rgba(34,31,32,0.15); height: 24px; }
+    .hflow-gate { width: 100%; max-width: 560px; background: rgba(34,31,32,0.04); border: 1.5px solid rgba(34,31,32,0.12); border-radius: 100px; padding: 10px 24px; text-align: center; font-size: 13px; font-weight: 700; color: var(--dark); }
+    .hflow-split-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; position: relative; }
+    .hflow-split-row::before { content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 2px; background: rgba(34,31,32,0.12); }
+    .hflow-branch { display: flex; flex-direction: column; align-items: center; }
+    .hflow-branch::before { content: ''; width: 2px; height: 16px; background: rgba(34,31,32,0.12); }
+    .hflow-yn { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; padding: 3px 12px; border-radius: 100px; margin-bottom: 10px; }
+    .hflow-yn-yes { background: rgba(22,163,74,0.12); color: var(--green); }
+    .hflow-yn-no  { background: rgba(220,38,38,0.08); color: var(--red); }
+    .hflow-branch-node { width: 100%; background: var(--white); border: 1.5px solid rgba(34,31,32,0.1); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: rgba(34,31,32,0.75); line-height: 1.6; }
+    .hflow-branch-node ul { padding-left: 14px; }
+    .hflow-branch-node li { margin-bottom: 2px; }
+    .hflow-branch-node.pain { border-left: 3px solid var(--red); background: rgba(220,38,38,0.03); }
+    .hflow-branch-node.opp  { border-left: 3px solid var(--green); background: rgba(22,163,74,0.04); }
+    .hflow-path-tag { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .hflow-path-tag.pain-tag { color: var(--red); }
+    .hflow-path-tag.opp-tag  { color: var(--green); }
+    .hflow-sub-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 8px; position: relative; }
+    .hflow-sub-split::before { content: ''; position: absolute; top: 0; left: 25%; right: 25%; height: 2px; background: rgba(34,31,32,0.1); }
+    .hflow-sub-branch { display: flex; flex-direction: column; align-items: center; }
+    .hflow-sub-branch::before { content: ''; width: 2px; height: 12px; background: rgba(34,31,32,0.1); }
+    .hflow-converge-bar { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0; }
+    .hflow-converge-bar::before, .hflow-converge-bar::after { content: ''; flex: 1; height: 2px; background: rgba(34,31,32,0.1); }
+    .hflow-converge-bar span { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(34,31,32,0.3); white-space: nowrap; }
+    .hflow-value-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .hflow-value-pill { font-size: 11px; font-weight: 700; background: var(--gold); color: var(--dark); padding: 4px 12px; border-radius: 100px; }
+    .hflow-outcomes { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; width: 100%; }
+    .hflow-outcome { text-align: center; border-radius: 12px; padding: 16px 12px; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+    .hflow-outcome-icon { font-size: 20px; margin-bottom: 8px; }
+    .hflow-outcome-book  { background: var(--gold); color: var(--dark); }
+    .hflow-outcome-later { background: rgba(34,31,32,0.06); color: rgba(34,31,32,0.55); }
+    .hflow-outcome-out   { background: rgba(220,38,38,0.08); color: var(--red); }
     .issues-summary-title::before { content: '⚠'; font-size: 18px; }
     .issue-row { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(34,31,32,0.06); align-items: flex-start; }
     .issue-row:last-child { border-bottom: none; }
@@ -543,14 +591,14 @@
      TAB BAR
 ════════════════════════════════════ -->
 <div id="tab-bar">
-  <button class="tab-btn active" data-tab="report">
+  <button class="tab-btn active" data-tab="agenda">
+    <div class="tab-dot"></div>Agenda
+  </button>
+  <button class="tab-btn" data-tab="report">
     <div class="tab-dot"></div>Report
   </button>
   <button class="tab-btn" data-tab="script">
     <div class="tab-dot"></div>Script
-  </button>
-  <button class="tab-btn" data-tab="agenda">
-    <div class="tab-dot"></div>Agenda
   </button>
 </div>
 
@@ -558,7 +606,7 @@
 <!-- ══════════════════════════════════
      TAB: REPORT
 ════════════════════════════════════ -->
-<div id="tab-report" class="tab-panel active">
+<div id="tab-report" class="tab-panel">
 
   <!-- Hero -->
   <section class="hero-section clip-bottom">
@@ -942,6 +990,161 @@
         <p style="margin-top:12px;">A visual breakdown of the current SDR script, showing how AU and US approaches differ — and where the US version needs work before the next cycle.</p>
       </div>
 
+      <!-- HIGH LEVEL CALL FLOW -->
+      <div class="hflow-section">
+        <p class="section-overline dark-text" style="margin-bottom:6px;">Apxium — High Level Call Flow</p>
+        <h2>Discovery Call Decision Tree</h2>
+        <p>The branching conversation logic from opening question to close — applicable across AU and US campaigns.</p>
+
+        <div class="hflow-diagram">
+
+          <!-- OPENING -->
+          <div class="hflow-node-center hflow-node-opening">
+            <div class="hflow-tag">Opening</div>
+            <div class="hflow-node-quote">"How are you currently handling invoicing and collections?"</div>
+          </div>
+          <div class="hflow-connector"></div>
+
+          <!-- Q1 gate -->
+          <div class="hflow-gate">Is there manual chasing or follow-up involved?</div>
+
+          <div class="hflow-split-row">
+            <!-- YES -->
+            <div class="hflow-branch">
+              <div class="hflow-yn hflow-yn-yes">Yes</div>
+              <div class="hflow-branch-node">
+                <ul>
+                  <li>Who is responsible?</li>
+                  <li>Time spent per week?</li>
+                  <li>Impact on team / cash flow?</li>
+                </ul>
+              </div>
+              <div class="hflow-connector" style="height:12px;"></div>
+              <div class="hflow-branch-node">What impact does that have when payments are delayed?</div>
+            </div>
+            <!-- NO -->
+            <div class="hflow-branch">
+              <div class="hflow-yn hflow-yn-no">No</div>
+              <div class="hflow-branch-node" style="font-weight:600;color:var(--dark);">Do you have clear visibility over outstanding invoices?</div>
+              <div class="hflow-sub-split">
+                <div class="hflow-sub-branch">
+                  <div class="hflow-yn hflow-yn-no" style="font-size:9px;">No</div>
+                  <div class="hflow-branch-node">What impact does that have when payments are delayed?</div>
+                </div>
+                <div class="hflow-sub-branch">
+                  <div class="hflow-yn hflow-yn-yes" style="font-size:9px;">Yes</div>
+                  <div class="hflow-branch-node">How consistent is your cash flow month to month?</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONVERGE 1 -->
+          <div class="hflow-converge-bar"><span>all paths converge</span></div>
+          <div class="hflow-connector"></div>
+
+          <!-- Q2 gate -->
+          <div class="hflow-gate">Are you happy with how quickly clients pay?</div>
+
+          <div class="hflow-split-row">
+            <!-- NO -->
+            <div class="hflow-branch">
+              <div class="hflow-yn hflow-yn-no">No</div>
+              <div class="hflow-branch-node">
+                <ul>
+                  <li>How long do clients typically take to pay?</li>
+                  <li>Does this create pressure?</li>
+                </ul>
+              </div>
+              <div class="hflow-connector" style="height:12px;"></div>
+              <div class="hflow-branch-node pain">
+                <div class="hflow-path-tag pain-tag">Pain Path</div>
+                Explore the cost of the problem — time, cash flow, team burden
+              </div>
+            </div>
+            <!-- YES -->
+            <div class="hflow-branch">
+              <div class="hflow-yn hflow-yn-yes">Yes</div>
+              <div class="hflow-branch-node" style="font-weight:600;color:var(--dark);">Are you using any automation tools?</div>
+              <div class="hflow-sub-split">
+                <div class="hflow-sub-branch">
+                  <div class="hflow-yn hflow-yn-no" style="font-size:9px;">No</div>
+                  <div class="hflow-branch-node opp">
+                    <div class="hflow-path-tag opp-tag">Opportunity</div>
+                    Position Apxium as the proactive upgrade
+                  </div>
+                </div>
+                <div class="hflow-sub-branch">
+                  <div class="hflow-yn hflow-yn-yes" style="font-size:9px;">Yes</div>
+                  <div class="hflow-branch-node">
+                    <ul>
+                      <li>What do you like?</li>
+                      <li>What would you change?</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONVERGE 2 -->
+          <div class="hflow-converge-bar"><span>all paths converge</span></div>
+          <div class="hflow-connector"></div>
+
+          <!-- POSITIONING -->
+          <div class="hflow-node-center hflow-node-position">
+            <div class="hflow-tag"><span class="hflow-tag-gold">Positioning — Apxium</span></div>
+            <div class="hflow-node-quote" style="margin-top:8px;">"Automates invoicing, follow-ups, payments &amp; reconciliation"</div>
+          </div>
+          <div class="hflow-connector"></div>
+
+          <!-- VALUE -->
+          <div class="hflow-node-center">
+            <div class="hflow-tag">Value — Tailored to their pain</div>
+            <div class="hflow-value-pills">
+              <span class="hflow-value-pill">Admin</span>
+              <span class="hflow-value-pill">Cash Flow</span>
+              <span class="hflow-value-pill">Visibility</span>
+              <span class="hflow-value-pill">Client Experience</span>
+            </div>
+          </div>
+          <div class="hflow-connector"></div>
+
+          <!-- QUALIFICATION -->
+          <div class="hflow-node-center hflow-node-qual">
+            <div class="hflow-tag">Qualification</div>
+            <ul style="padding-left:16px; font-size:13px; color:rgba(34,31,32,0.75); line-height:1.8; margin-top:6px;">
+              <li>How many invoices per month?</li>
+              <li>Looking to improve cash flow?</li>
+            </ul>
+          </div>
+          <div class="hflow-connector"></div>
+
+          <!-- CLOSE -->
+          <div class="hflow-node-center hflow-node-close">
+            <div class="hflow-tag">Close</div>
+            <div class="hflow-node-quote">"Worth a 15-min walkthrough?"</div>
+          </div>
+          <div class="hflow-connector"></div>
+
+          <!-- OUTCOMES -->
+          <div class="hflow-outcomes">
+            <div class="hflow-outcome hflow-outcome-book">
+              <div class="hflow-outcome-icon">📅</div>Book Meeting
+            </div>
+            <div class="hflow-outcome hflow-outcome-later">
+              <div class="hflow-outcome-icon">🔄</div>Follow Up Later
+            </div>
+            <div class="hflow-outcome hflow-outcome-out">
+              <div class="hflow-outcome-icon">✕</div>Qualify Out
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /hflow-section -->
+
+      <div style="border-top:2px solid rgba(34,31,32,0.08);margin:52px 0;"></div>
+
       <!-- AU vs US side-by-side -->
       <div class="script-compare">
 
@@ -1119,7 +1322,7 @@
 <!-- ══════════════════════════════════
      TAB: AGENDA
 ════════════════════════════════════ -->
-<div id="tab-agenda" class="tab-panel">
+<div id="tab-agenda" class="tab-panel active">
   <div class="agenda-page">
     <div class="agenda-page-inner">
 
@@ -1213,10 +1416,6 @@
   <div id="comment-modal-box">
     <h3>Leave a comment</h3>
     <div id="comment-modal-quote"></div>
-    <div class="comment-field">
-      <label>Your name</label>
-      <input type="text" id="comment-author" placeholder="e.g. Sarah from Apxium" />
-    </div>
     <div class="comment-field">
       <label>Comment</label>
       <textarea id="comment-text" placeholder="What's your thought on this?"></textarea>
@@ -1350,7 +1549,7 @@
       const rect  = range.getBoundingClientRect();
       tooltip.style.display = 'block';
       tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
-      tooltip.style.top  = (rect.top - 48 + window.scrollY) + 'px';
+      tooltip.style.top  = (rect.top - 48) + 'px';
       _pendingRange = range.cloneRange();
       _pendingText  = sel.toString().trim();
     }, 10);
@@ -1367,10 +1566,9 @@
     if (!_pendingText) return;
     const q = document.getElementById('comment-modal-quote');
     q.textContent = '"' + (_pendingText.length > 120 ? _pendingText.slice(0, 120) + '…' : _pendingText) + '"';
-    document.getElementById('comment-author').value = '';
     document.getElementById('comment-text').value = '';
     document.getElementById('comment-modal-overlay').classList.add('open');
-    setTimeout(() => document.getElementById('comment-author').focus(), 100);
+    setTimeout(() => document.getElementById('comment-text').focus(), 100);
   });
 
   function closeCommentModal() {
@@ -1381,8 +1579,7 @@
   }
 
   function submitComment() {
-    const author = document.getElementById('comment-author').value.trim() || 'Anonymous';
-    const text   = document.getElementById('comment-text').value.trim();
+    const text = document.getElementById('comment-text').value.trim();
     if (!text) { document.getElementById('comment-text').focus(); return; }
 
     // Wrap selection in highlight mark
@@ -1408,7 +1605,6 @@
       id: 'c_' + Date.now(),
       selectedText: _pendingText.length > 160 ? _pendingText.slice(0, 160) + '…' : _pendingText,
       comment: text,
-      author: author,
       time: new Date().toLocaleString('en-AU', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
     };
     comments.push(newComment);
@@ -1450,7 +1646,7 @@
         <div class="comment-entry-quote">${c.selectedText}</div>
         <div class="comment-entry-text">${c.comment}</div>
         <div class="comment-entry-meta">
-          <span><strong>${c.author}</strong> &nbsp;·&nbsp; ${c.time}</span>
+          <span>${c.time}</span>
           <button class="comment-entry-delete" onclick="deleteComment('${c.id}')">Delete</button>
         </div>
       </div>
