@@ -634,10 +634,7 @@
      TAB BAR
 ════════════════════════════════════ -->
 <div id="tab-bar">
-  <button class="tab-btn active" data-tab="agenda">
-    <div class="tab-dot"></div>Agenda
-  </button>
-  <button class="tab-btn" data-tab="report">
+  <button class="tab-btn active" data-tab="report">
     <div class="tab-dot"></div>Report
   </button>
   <button class="tab-btn" data-tab="script">
@@ -649,7 +646,7 @@
 <!-- ══════════════════════════════════
      TAB: REPORT
 ════════════════════════════════════ -->
-<div id="tab-report" class="tab-panel">
+<div id="tab-report" class="tab-panel active">
 
   <!-- Hero -->
   <section class="hero-section clip-bottom">
@@ -1486,89 +1483,6 @@
 <!-- ══════════════════════════════════
      TAB: AGENDA
 ════════════════════════════════════ -->
-<div id="tab-agenda" class="tab-panel active">
-  <div class="agenda-page">
-    <div class="agenda-page-inner">
-
-      <!-- Meeting card -->
-      <div class="agenda-meeting-card">
-        <div class="agenda-meeting-label">Today's Call Agenda</div>
-        <div class="agenda-meeting-title">Apxium × Journey<br/>Strategy Session</div>
-        <div class="agenda-meeting-sub">Campaign review, alignment, and next steps</div>
-        <div class="agenda-meeting-meta">
-          <div class="agenda-meta-pill"><span>📅</span> 7 May 2026</div>
-          <div class="agenda-meta-pill"><span>👥</span> Apxium + Journey SDR Team</div>
-          <div class="agenda-meta-pill"><span>⏱</span> 3 agenda items</div>
-        </div>
-      </div>
-
-      <!-- Agenda items -->
-      <div class="agenda-items">
-
-        <div class="agenda-item open">
-          <div class="agenda-item-header" onclick="toggleAgenda(this)">
-            <div class="agenda-item-num">1</div>
-            <div class="agenda-item-title">ABE Results, Product Focus, Messaging &amp; Next Steps</div>
-            <div class="agenda-item-arrow">▶</div>
-          </div>
-          <div class="agenda-sub-items">
-            <div style="font-size:13px;color:rgba(34,31,32,0.5);line-height:1.7;margin-bottom:14px;padding:12px 16px;background:rgba(255,191,0,0.07);border-radius:10px;border-left:3px solid var(--gold);">
-              Review AU ABE campaign performance (9 demos booked, 18 warm deferred contacts), discuss product messaging alignment, and confirm next steps for the June re-engagement sequence.
-            </div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Review Week 1 &amp; Week 2 AU ABE campaign results against targets</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Assess which ABE messaging resonated most with firm owners</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Confirm product positioning and proof points for June re-engagement</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Agree next steps for the 18 deferred contacts (tag in HubSpot, sequence timing)</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Confirm status of 9 booked demos → sales meeting conversions</div></div>
-          </div>
-        </div>
-
-        <div class="agenda-item open">
-          <div class="agenda-item-header" onclick="toggleAgenda(this)">
-            <div class="agenda-item-num">2</div>
-            <div class="agenda-item-title">US Californian Contacts — Results, Messaging &amp; Next Steps</div>
-            <div class="agenda-item-arrow">▶</div>
-          </div>
-          <div class="agenda-sub-items">
-            <div style="font-size:13px;color:rgba(34,31,32,0.5);line-height:1.7;margin-bottom:14px;padding:12px 16px;background:rgba(220,38,38,0.05);border-radius:10px;border-left:3px solid var(--red);">
-              Review US campaign results (0 demos, 6 hang-ups), identify script and list structure issues, and agree the rebuild plan before calling resumes.
-            </div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Review US campaign performance — 48 calls, 10 connected, 0 demos booked</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Diagnose script issues: AU-specific references (ASIC/ABE) not resonating in US</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Confirm US proof points Apxium can provide for script localisation</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Align on next US call list — lower-end mid-tier or higher-end lower-tier firms for script testing (Top 500 on hold pending tailored dialogue + verified data)</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Rebuild timeline: when will new list + localised script be ready?</div></div>
-            <div style="margin-top:16px;padding:14px 16px;background:rgba(34,31,32,0.04);border-radius:10px;border: 1px solid rgba(34,31,32,0.08);">
-              <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:rgba(34,31,32,0.4);margin-bottom:8px;">Sub-topic</div>
-              <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:6px;">Alignment on Events &amp; Internal Marketing Activity</div>
-              <div class="agenda-sub-item" style="border-bottom:none;padding:6px 0;"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">Which US events or conferences can anchor brand awareness before next call cycle?</div></div>
-              <div class="agenda-sub-item" style="border-bottom:none;padding:6px 0;"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text">What internal marketing activations are planned that SDR team should align with?</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="agenda-item open">
-          <div class="agenda-item-header" onclick="toggleAgenda(this)">
-            <div class="agenda-item-num">3</div>
-            <div class="agenda-item-title">Overall Process — How We Work Together</div>
-            <div class="agenda-item-arrow">▶</div>
-          </div>
-          <div class="agenda-sub-items">
-            <div style="font-size:13px;color:rgba(34,31,32,0.5);line-height:1.7;margin-bottom:14px;padding:12px 16px;background:rgba(34,31,32,0.04);border-radius:10px;border-left:3px solid var(--dark);">
-              Establish the operating rhythm between Apxium and the Journey SDR team — covering communication protocols, campaign strategy alignment, and how new market entries are handled.
-            </div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text"><strong style="color:var(--dark);">US &amp; new market entries</strong> — how we communicate on call plans, strategy, and scripts before campaigns go live</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text"><strong style="color:var(--dark);">Marketing activation alignment</strong> — how internal Apxium events and marketing activity feeds into SDR timing and messaging</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text"><strong style="color:var(--dark);">Multi-touch sequences vs high-volume calling</strong> — when to use email + LinkedIn sequences vs pure calling, and how to layer these approaches (especially for US)</div></div>
-            <div class="agenda-sub-item"><div class="agenda-sub-arrow">▸</div><div class="agenda-sub-text"><strong style="color:var(--dark);">New target account batches</strong> — process for reviewing and approving new lists, agreeing call plans, and aligning on scripts before each batch goes live</div></div>
-          </div>
-        </div>
-
-      </div><!-- /agenda-items -->
-
-    </div>
-  </div>
-</div><!-- /tab-agenda -->
 
 
 <!-- ══════════════════════════════════
