@@ -120,9 +120,12 @@
 
     /* ── CAMPAIGN PERFORMANCE ── */
     .perf-section { background: var(--white); padding: 72px 32px; }
-    .perf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; margin-bottom: 56px; }
+    .perf-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 36px; align-items: start; margin-bottom: 56px; }
     .perf-badge { display: inline-block; font-weight: 800; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dark); background: var(--gold); border-radius: 7px; padding: 4px 12px; margin-bottom: 14px; }
     .perf-badge.muted { background: rgba(34,31,32,0.1); }
+    .perf-badge.green { background: #4ADE80; color: var(--dark); }
+    .bar-green { background: #4ADE80; }
+    .perf-callout.active { background: rgba(74,222,128,0.07); border-left: 4px solid #4ADE80; }
     .perf-title { font-weight: 900; font-size: clamp(22px,2.5vw,28px); color: var(--dark); margin-bottom: 28px; line-height: 1.2; }
     .metric-row { margin-bottom: 18px; }
     .metric-row-header { display: flex; justify-content: space-between; align-items: flex-start; font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 6px; min-height: 20px; }
@@ -909,26 +912,51 @@
           <div class="metric-row">
             <div class="metric-row-header"><span>Connection Rate</span><span>22%</span></div>
             <div class="bar-track"><div class="bar-fill bar-gold" data-width="22"></div></div>
+            <div class="metric-row-sub">37 of 171 reached — contact data gap in Week 1</div>
           </div>
           <div class="metric-row">
             <div class="metric-row-header"><span>Demo Conversion</span><span>24%</span></div>
             <div class="bar-track"><div class="bar-fill bar-gold" data-width="24"></div></div>
+            <div class="metric-row-sub">9 of 37 connected booked a demo</div>
           </div>
           <div class="metric-row">
             <div class="metric-row-header"><span>Warm Deferred Pipeline</span><span>49%</span></div>
             <div class="bar-track"><div class="bar-fill bar-gold" data-width="49"></div></div>
-            <div class="metric-row-sub">18 of 37 connected → warm June pipeline</div>
+            <div class="metric-row-sub">18 of 37 deferred post-May-15 — warm re-engagement</div>
           </div>
           <div class="perf-callout positive">
-            <p>Warm pipeline performing. ABE familiarity shortens the trust cycle — contacts already know Apxium.</p>
+            <p>ABE familiarity shortens the trust cycle. Contacts already know Apxium — conversion rate reflects that head start.</p>
           </div>
         </div>
         <div class="reveal reveal-d1">
-          <span class="perf-badge muted">US — Lower Revenue</span>
+          <span class="perf-badge green">AU — APC Dataset</span>
+          <h3 class="perf-title">136 calls &nbsp;·&nbsp; 7 appts booked</h3>
+          <div class="metric-row">
+            <div class="metric-row-header"><span>Connection Rate</span><span>46%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-green" data-width="46"></div></div>
+            <div class="metric-row-sub">62 of 136 — 2× higher than ABE; direct mobile numbers</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header"><span>Appt Conversion</span><span>11%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-green" data-width="11"></div></div>
+            <div class="metric-row-sub">7 of 62 connected booked — in-market firms switching from Xero/MYOB</div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-row-header"><span>Bad Contact Rate</span><span>19%</span></div>
+            <div class="bar-track"><div class="bar-fill bar-muted" data-width="19"></div></div>
+            <div class="metric-row-sub">12 wrong-info records — revisited unqualified contacts</div>
+          </div>
+          <div class="perf-callout positive">
+            <p>Strongest connection rate in the programme. APC firms are actively switching from Xero/MYOB — timing and relevance are ideal.</p>
+          </div>
+        </div>
+        <div class="reveal reveal-d2">
+          <span class="perf-badge muted">US — California</span>
           <h3 class="perf-title">48 calls &nbsp;·&nbsp; 0 demos booked</h3>
           <div class="metric-row">
             <div class="metric-row-header"><span>Connection Rate</span><span>21%</span></div>
             <div class="bar-track"><div class="bar-fill bar-muted" data-width="21"></div></div>
+            <div class="metric-row-sub">10 of 48 — cold outreach, no prior brand awareness</div>
           </div>
           <div class="metric-row">
             <div class="metric-row-header"><span>Demo Conversion</span><span>0%</span></div>
@@ -938,15 +966,15 @@
           <div class="metric-row">
             <div class="metric-row-header"><span>Hung Up / IVR Blocked</span><span>17%</span></div>
             <div class="bar-track"><div class="bar-fill bar-muted" data-width="17"></div></div>
-            <div class="metric-row-sub">Cold outreach without prior brand awareness</div>
+            <div class="metric-row-sub">8 of 48 — cold drop without familiarity</div>
           </div>
-          <div class="perf-callout negative">
-            <p>Script and list structure need a rebuild. This is solvable — not a product-fit issue.</p>
+          <div class="perf-callout active">
+            <p>Now reactivating — San Diego warm leads (33–35) booking with Ned. California 5-touch cadence live. Script localisation still needed before conversion can happen.</p>
           </div>
         </div>
       </div>
       <div class="reveal">
-        <p class="chart-label">AU vs US — Side-by-side comparison</p>
+        <p class="chart-label">AU ABE vs AU APC vs US — Three-dataset comparison</p>
         <div class="chart-container">
           <canvas id="auVsUsChart"></canvas>
         </div>
@@ -1674,10 +1702,11 @@
   window._auChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Calls Made', 'Connected', 'Demos Booked', 'Deferred / Callbacks', 'Not Interested'],
+      labels: ['Calls Made', 'Connected', 'Demos / Appts', 'Deferred / Warm', 'Not Interested'],
       datasets: [
         { label: 'AU — ABE', data: [171, 37, 9, 18, 19], backgroundColor: '#FFBF00', borderRadius: 7, borderSkipped: false },
-        { label: 'US Campaign', data: [48, 10, 0, 4, 6], backgroundColor: 'rgba(34,31,32,0.2)', borderRadius: 7, borderSkipped: false }
+        { label: 'AU — APC', data: [136, 62, 7, 3, 1], backgroundColor: '#4ADE80', borderRadius: 7, borderSkipped: false },
+        { label: 'US — California', data: [48, 10, 0, 4, 6], backgroundColor: 'rgba(34,31,32,0.2)', borderRadius: 7, borderSkipped: false }
       ]
     },
     options: {
