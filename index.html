@@ -569,6 +569,33 @@
       display: none; font-family: 'Recursive', sans-serif;
     }
 
+    /* ── WEEK TABLE ── */
+    .wk-table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); margin-top: 32px; }
+    .wk-period-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; background: rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .wk-period-label { display: flex; align-items: center; gap: 9px; font-weight: 900; font-size: 14px; color: var(--white); white-space: nowrap; }
+    .wk-period-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .wk-period-stats { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 600; white-space: nowrap; }
+    .wk-table { width: 100%; border-collapse: collapse; min-width: 680px; }
+    .wk-table thead tr { background: var(--dark); }
+    .wk-table thead th { padding: 13px 16px; font-size: 10px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); text-align: left; white-space: nowrap; border-right: 1px solid rgba(255,255,255,0.06); }
+    .wk-table thead th:last-child { border-right: none; }
+    .wk-table thead th.col-gold { color: var(--gold); }
+    .wk-table tbody tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .wk-table tbody tr:last-child { border-bottom: none; }
+    .wk-table tbody tr.wk-row-au { background: rgba(255,191,0,0.06); }
+    .wk-table tbody tr.wk-row-us { background: rgba(255,255,255,0.02); opacity: 0.65; }
+    .wk-table tbody td { padding: 18px 16px; vertical-align: top; border-right: 1px solid rgba(255,255,255,0.05); }
+    .wk-table tbody td:last-child { border-right: none; }
+    .wk-date { font-weight: 800; font-size: 14px; color: var(--white); margin-bottom: 3px; white-space: nowrap; }
+    .wk-tag { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+    .wk-num { font-size: 22px; font-weight: 900; color: var(--white); line-height: 1; white-space: nowrap; }
+    .wk-num.dim { color: rgba(255,255,255,0.25); font-size: 18px; }
+    .wk-pct { font-size: 17px; font-weight: 800; color: rgba(255,255,255,0.65); white-space: nowrap; }
+    .wk-pct.gold { color: var(--gold); }
+    .wk-pct.zero { color: rgba(255,255,255,0.2); }
+    .wk-na { font-size: 16px; color: rgba(255,255,255,0.2); font-style: italic; }
+    .wk-standout { font-size: 12px; color: rgba(255,255,255,0.5); line-height: 1.75; max-width: 280px; }
+
     /* ── LATEST WEEK SNAPSHOT ── */
     .latest-week-section { background: #F9F8F6; padding: 72px 32px; }
     .latest-week-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--dark); color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 16px; border-radius: 100px; margin-bottom: 24px; }
@@ -614,6 +641,8 @@
       .latest-metric-num { font-size: 44px; }
       .latest-standout-row { flex-direction: column; gap: 12px; }
       .trends-blockers-grid { grid-template-columns: 1fr; gap: 40px; }
+      .wk-standout { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+      .wk-period-stats { font-size: 11px; }
       .stats-grid { grid-template-columns: repeat(2,1fr); }
       .stats-grid .stat-card:last-child { grid-column: span 2; }
       .perf-grid, .insights-grid, .actions-grid { grid-template-columns: 1fr; }
@@ -930,158 +959,71 @@
     <div class="section-inner">
       <p class="section-overline">Programme Timeline</p>
       <h2 class="section-heading">Week by Week</h2>
-      <div class="weeks-grid">
-        <div class="week-card reveal">
-          <span class="week-badge">Week 1 &nbsp;·&nbsp; 6–8 Apr</span>
-          <h4 class="week-card-title">AU ABE — Contact Data Gap</h4>
-          <p class="week-card-body">105 calls into ABE conference list. Missing contact numbers blocked connections on ~50% of target accounts. Despite zero connected calls in the data, 8 demos were booked through existing familiarity and direct follow-up.</p>
-          <div class="week-mini-grid">
-            <div class="week-mini-cell"><div class="week-mini-num">105</div><div class="week-mini-lbl">Calls</div></div>
-            <div class="week-mini-cell"><div class="week-mini-num">0</div><div class="week-mini-lbl">Connected</div></div>
-            <div class="week-mini-cell highlight"><div class="week-mini-num">8</div><div class="week-mini-lbl">Demos</div></div>
-          </div>
-          <div class="week-notes">
-            <div>
-              <div class="week-notes-block-label key">Key Notes</div>
-              <ul class="week-notes-list">
-                <li>All 8 appointments came from contacts already familiar with Apxium — warmer conversations and noticeably higher conversion rate</li>
-                <li><strong>Primary blocker:</strong> Significant proportion of leads had no contact number on file, limiting overall reach</li>
-                <li>HubSpot connection tracking not yet configured — being resolved ahead of Week 2</li>
-              </ul>
-            </div>
-            <div>
-              <div class="week-notes-block-label steps">Next Steps</div>
-              <ul class="week-notes-list steps">
-                <li>Configure HubSpot to track calls connected</li>
-                <li>Continue ABE follow-up calls with enriched contact data</li>
-                <li>Begin US Lower Revenue Firms list in parallel</li>
-              </ul>
-            </div>
-          </div>
+      <div class="wk-table-wrap reveal">
+        <div class="wk-period-row">
+          <div class="wk-period-label"><span class="wk-period-dot"></span>Q2 2026</div>
+          <div class="wk-period-stats">5 weeks &nbsp;·&nbsp; 355 calls &nbsp;·&nbsp; 16 appts &nbsp;·&nbsp; 4.5% conv</div>
         </div>
-        <div class="week-card reveal reveal-d1">
-          <span class="week-badge">Week 2 &nbsp;·&nbsp; 13–16 Apr</span>
-          <h4 class="week-card-title">AU ABE — Live Conversations</h4>
-          <p class="week-card-body">Improved contact data. 66 calls, 37 connected. 1 demo booked on-call. 18 contacts deferred to post-May-15 tax deadline — qualified warm pipeline, not lost leads.</p>
-          <div class="week-mini-grid">
-            <div class="week-mini-cell"><div class="week-mini-num">66</div><div class="week-mini-lbl">Calls</div></div>
-            <div class="week-mini-cell"><div class="week-mini-num">37</div><div class="week-mini-lbl">Connected</div></div>
-            <div class="week-mini-cell highlight"><div class="week-mini-num">18</div><div class="week-mini-lbl">Deferred</div></div>
-          </div>
-          <div class="week-notes">
-            <div>
-              <div class="week-notes-block-label key">Key Notes</div>
-              <ul class="week-notes-list">
-                <li><strong>Standout booking:</strong> Wealthcrest — strong alignment between their services and Apxium's value proposition</li>
-                <li><strong>Primary blocker:</strong> May 15 tax deadline — 18 deferrals are timing-related, not a rejection of the product. Warm pipeline to re-engage early June</li>
-                <li>19 not interested — no specific objection captured in most cases; objection logging to be added to script</li>
-                <li>Strong overall reception to product messaging; conversations have helped sharpen positioning</li>
-              </ul>
-            </div>
-            <div>
-              <div class="week-notes-block-label steps">Next Steps</div>
-              <ul class="week-notes-list steps">
-                <li>Tag all 18 post-deadline contacts in HubSpot with a June re-engagement date</li>
-                <li>Pause further ABE call attempts; schedule re-engagement for early–mid June</li>
-                <li>Conduct messaging review — assess what resonated vs. what didn't before the June cycle</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="week-card muted reveal reveal-d2">
-          <span class="week-badge muted">Week 2 &nbsp;·&nbsp; 13–16 Apr</span>
-          <h4 class="week-card-title">US Lower Revenue — Cold Start</h4>
-          <p class="week-card-body">48 calls into US lower-revenue firms. 10 connected (21%). Script carried AU-specific references irrelevant to US prospects. Zero demos booked. 6 hang-ups, 2 IVR blocks.</p>
-          <div class="week-mini-grid">
-            <div class="week-mini-cell"><div class="week-mini-num">48</div><div class="week-mini-lbl">Calls</div></div>
-            <div class="week-mini-cell"><div class="week-mini-num">10</div><div class="week-mini-lbl">Connected</div></div>
-            <div class="week-mini-cell danger"><div class="week-mini-num danger-text">0</div><div class="week-mini-lbl">Demos</div></div>
-          </div>
-          <div class="week-notes">
-            <div>
-              <div class="week-notes-block-label key">Key Notes</div>
-              <ul class="week-notes-list">
-                <li>First run at the US market — early signals only, limited feedback volume</li>
-                <li>Multiple prospects unfamiliar with Apxium — clear need for brand awareness before outreach resumes</li>
-                <li>4 callback requests are the only positive signals; 6 hang-ups indicate cold contact without prior familiarity</li>
-                <li><strong>Current blocker:</strong> SDR team has exhausted the existing call list — new list required urgently. Next list should target lower-end mid-tier or higher-end lower-tier US firms while the script is refined. Top 500 firms require a separate tailored dialogue and verified contact data before calling</li>
-              </ul>
-            </div>
-            <div>
-              <div class="week-notes-block-label steps">Next Steps</div>
-              <ul class="week-notes-list steps">
-                <li>Confirm next call list — target lower-end mid-tier or higher-end lower-tier US firms while the script is being refined (fewer gatekeepers, more accessible)</li>
-                <li>Top 500 firms to be held until a separate dialogue and fully verified contact data are in place</li>
-                <li>Review and localise US script — remove AU-specific references, add US proof points</li>
-                <li>Consider supporting US campaign with brand awareness / marketing activity</li>
-                <li>Follow up with 4 callback-requested contacts once new list is confirmed</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="week-card reveal">
-  <span class="week-badge">Week 3 &nbsp;·&nbsp; 8–11 Jun</span>
-  <h4 class="week-card-title">AU — APC + ABE Re-engagement</h4>
-  <p class="week-card-body">50 calls into APC and ABE lists. 18 connected (36%). 3 appointments set — 2 from APC data, 1 from ABE. Reduced output due to 4-day week and initial setup overhead now resolved.</p>
-  <div class="week-mini-grid">
-    <div class="week-mini-cell"><div class="week-mini-num">50</div><div class="week-mini-lbl">Calls</div></div>
-    <div class="week-mini-cell"><div class="week-mini-num">18</div><div class="week-mini-lbl">Connected</div></div>
-    <div class="week-mini-cell highlight"><div class="week-mini-num">3</div><div class="week-mini-lbl">Booked</div></div>
-  </div>
-  <div class="week-notes">
-    <div>
-      <div class="week-notes-block-label key">Key Notes</div>
-      <ul class="week-notes-list">
-        <li><strong>Standout bookings:</strong> DTTS and Peter Woods &amp; Associates — both 100+ client firms from the new APC dataset</li>
-        <li>2 appointments from APC data, 1 from ABE — APC showing strong early conversion signal</li>
-        <li>HubSpot email sync resolved Friday — emails now sending from correct address (was defaulting to Apxium support)</li>
-        <li>Email templates added to HubSpot, reducing manual workload going forward</li>
-        <li>Several APC leads with missing notes; some contacts have incorrect mobiles (previously unqualified records revisited)</li>
-      </ul>
-    </div>
-    <div>
-      <div class="week-notes-block-label steps">Next Steps</div>
-      <ul class="week-notes-list steps">
-        <li>Verify HubSpot email sync is fully operational</li>
-        <li>Continue APC outreach — strong early signal</li>
-        <li>Audit APC leads with missing notes and incorrect contact info</li>
-        <li>Re-engage ABE deferred contacts (post-May-15 tax deadline)</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="week-card reveal reveal-d1">
-  <span class="week-badge">Week 4 &nbsp;·&nbsp; 12–18 Jun</span>
-  <h4 class="week-card-title">AU — Full HubSpot Reporting Live</h4>
-  <p class="week-card-body">86 calls, 44 connected (51%) — highest connection rate in the programme. 4 appointments set. First week with full HubSpot outcome tracking in place. Data constraints now the primary limiter.</p>
-  <div class="week-mini-grid">
-    <div class="week-mini-cell"><div class="week-mini-num">86</div><div class="week-mini-lbl">Calls</div></div>
-    <div class="week-mini-cell"><div class="week-mini-num">44</div><div class="week-mini-lbl">Connected</div></div>
-    <div class="week-mini-cell highlight"><div class="week-mini-num">4</div><div class="week-mini-lbl">Booked</div></div>
-  </div>
-  <div class="week-notes">
-    <div>
-      <div class="week-notes-block-label key">Key Notes</div>
-      <ul class="week-notes-list">
-        <li><strong>Standout booking:</strong> Dawson &amp; Partners — 2,800+ clients, strong interest in Tax Pay, existing relationship via APC conference</li>
-        <li>51% connection rate — highest in the programme so far</li>
-        <li>HubSpot outcome tracking fully live — first clean reporting dataset: 22 gatekeeper passes, 3 interested/not now, 1 not interested, 42 no answer, 12 wrong info</li>
-        <li>74 of 142 APC + ABE contacts available to call — data pool urgently needs expanding (ABE: 43/102; APC: 31/42)</li>
-      </ul>
-    </div>
-    <div>
-      <div class="week-notes-block-label steps">Next Steps</div>
-      <ul class="week-notes-list steps">
-        <li>Follow up with 3 "interested, not now" contacts</li>
-        <li>Source additional contact data urgently — pool nearly exhausted</li>
-        <li>Continue weekly review rhythm (15-min mid-week + 30-min end-of-week)</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
+        <table class="wk-table">
+          <thead>
+            <tr>
+              <th>Week Ending</th>
+              <th>Calls Made</th>
+              <th>Connected</th>
+              <th>Connect %</th>
+              <th class="col-gold">Appts Set</th>
+              <th class="col-gold">Conv. %</th>
+              <th>Standout Booking</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="wk-row-au">
+              <td><div class="wk-date">18 Jun 2026</div><div class="wk-tag">AU — APC</div></td>
+              <td><div class="wk-num">86</div></td>
+              <td><div class="wk-num">44</div></td>
+              <td><div class="wk-pct">51.2%</div></td>
+              <td><div class="wk-num">4</div></td>
+              <td><div class="wk-pct gold">4.7%</div></td>
+              <td><div class="wk-standout">Dawson &amp; Partners (2,800+ clients, strong interest in Tax Pay, existing APC relationship) &nbsp;·&nbsp; First full week of clean HubSpot outcome tracking &nbsp;·&nbsp; Programme-high connection rate</div></td>
+            </tr>
+            <tr class="wk-row-au">
+              <td><div class="wk-date">11 Jun 2026</div><div class="wk-tag">AU — APC + ABE</div></td>
+              <td><div class="wk-num">50</div></td>
+              <td><div class="wk-num">18</div></td>
+              <td><div class="wk-pct">36.0%</div></td>
+              <td><div class="wk-num">3</div></td>
+              <td><div class="wk-pct gold">6.0%</div></td>
+              <td><div class="wk-standout">DTTS &amp; Peter Woods and Associates — both 100+ client APC firms &nbsp;·&nbsp; APC dataset showing strong early conversion signal &nbsp;·&nbsp; HubSpot email sync resolved</div></td>
+            </tr>
+            <tr class="wk-row-us">
+              <td><div class="wk-date">16 Apr 2026</div><div class="wk-tag">US</div></td>
+              <td><div class="wk-num">48</div></td>
+              <td><div class="wk-num">10</div></td>
+              <td><div class="wk-pct">20.8%</div></td>
+              <td><div class="wk-num dim">0</div></td>
+              <td><div class="wk-pct zero">0%</div></td>
+              <td><div class="wk-standout">No bookings &nbsp;·&nbsp; Script carried AU-specific references irrelevant to US prospects &nbsp;·&nbsp; 4 callback requests only positive signal &nbsp;·&nbsp; Paused pending script rebuild and new list</div></td>
+            </tr>
+            <tr class="wk-row-au">
+              <td><div class="wk-date">16 Apr 2026</div><div class="wk-tag">AU — ABE</div></td>
+              <td><div class="wk-num">66</div></td>
+              <td><div class="wk-num">37</div></td>
+              <td><div class="wk-pct">56.1%</div></td>
+              <td><div class="wk-num">1</div></td>
+              <td><div class="wk-pct gold">2.7%</div></td>
+              <td><div class="wk-standout">Wealthcrest — strong alignment with Apxium's value proposition &nbsp;·&nbsp; 18 contacts deferred to post-May-15 tax deadline — warm pipeline, not lost leads</div></td>
+            </tr>
+            <tr class="wk-row-au">
+              <td><div class="wk-date">8 Apr 2026</div><div class="wk-tag">AU — ABE</div></td>
+              <td><div class="wk-num">105</div></td>
+              <td><div class="wk-na">—</div></td>
+              <td><div class="wk-na">—</div></td>
+              <td><div class="wk-num">8</div></td>
+              <td><div class="wk-pct gold">7.6%</div></td>
+              <td><div class="wk-standout">8 bookings through existing ABE familiarity — all from contacts who already knew Apxium &nbsp;·&nbsp; Contact data gap blocked connections on ~50% of targets &nbsp;·&nbsp; HubSpot tracking not yet configured</div></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
