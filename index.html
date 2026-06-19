@@ -569,13 +569,51 @@
       display: none; font-family: 'Recursive', sans-serif;
     }
 
+    /* ── LATEST WEEK SNAPSHOT ── */
+    .latest-week-section { background: #F9F8F6; padding: 72px 32px; }
+    .latest-week-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--dark); color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; padding: 7px 16px; border-radius: 100px; margin-bottom: 24px; }
+    .latest-week-badge::before { content: ''; width: 7px; height: 7px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+    .latest-week-title { font-size: clamp(28px,4vw,42px); font-weight: 900; color: var(--dark); line-height: 1.1; margin-bottom: 6px; }
+    .latest-week-date { font-size: 14px; color: rgba(34,31,32,0.4); margin-bottom: 36px; }
+    .latest-week-card { background: var(--white); border-radius: 20px; border: 1px solid rgba(34,31,32,0.07); overflow: hidden; }
+    .latest-metrics-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; }
+    .latest-metric-box { padding: 32px 28px; border-right: 1px solid rgba(34,31,32,0.07); }
+    .latest-metric-box:last-child { border-right: none; }
+    .latest-metric-num { font-size: 56px; font-weight: 900; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+    .latest-metric-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(34,31,32,0.45); margin-bottom: 4px; }
+    .latest-metric-sub { font-size: 13px; font-weight: 700; color: rgba(34,31,32,0.65); }
+    .latest-standout-row { padding: 20px 28px; border-top: 1px solid rgba(34,31,32,0.07); display: flex; align-items: flex-start; gap: 20px; justify-content: space-between; }
+    .latest-standout-left { flex: 1; min-width: 0; }
+    .latest-standout-label { font-size: 10px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+    .latest-standout-text { font-size: 13px; color: rgba(34,31,32,0.6); line-height: 1.7; font-style: italic; }
+    .latest-view-link { font-size: 11px; font-weight: 900; color: var(--dark); text-decoration: underline; text-underline-offset: 3px; letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .latest-view-link:hover { color: var(--gold); }
+    .trends-blockers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 56px; align-items: start; }
+    .trends-col-title { font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(34,31,32,0.4); margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid var(--gold); display: inline-block; }
+    .trend-item { display: flex; gap: 18px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid rgba(34,31,32,0.06); }
+    .trend-item:last-child { border-bottom: none; }
+    .trend-num { font-size: 30px; font-weight: 900; color: rgba(255,191,0,0.25); line-height: 1; min-width: 42px; text-align: right; }
+    .trend-title { font-size: 14px; font-weight: 800; color: var(--dark); margin-bottom: 4px; line-height: 1.3; }
+    .trend-desc { font-size: 13px; color: rgba(34,31,32,0.55); line-height: 1.65; }
+    .blocker-item { display: flex; gap: 14px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid rgba(34,31,32,0.06); }
+    .blocker-item:last-child { border-bottom: none; }
+    .blocker-icon { width: 34px; height: 34px; border-radius: 9px; background: rgba(239,68,68,0.09); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .blocker-title { font-size: 14px; font-weight: 800; color: var(--dark); margin-bottom: 4px; line-height: 1.3; }
+    .blocker-desc { font-size: 13px; color: rgba(34,31,32,0.55); line-height: 1.65; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(3,1fr); } }
     @media (max-width: 768px) {
       #main-nav, #tab-bar { padding: 0 20px; }
       .nav-label, .nav-divider { display: none; }
       .hero-section, .stats-section, .perf-section, .table-section, .recs-section, .actions-section { padding-left: 20px; padding-right: 20px; }
-      .weeks-section, .insights-section, .milestones-section { padding-left: 20px; padding-right: 20px; }
+      .weeks-section, .insights-section, .milestones-section, .latest-week-section { padding-left: 20px; padding-right: 20px; }
+      .latest-metrics-row { grid-template-columns: 1fr; }
+      .latest-metric-box { border-right: none; border-bottom: 1px solid rgba(34,31,32,0.07); }
+      .latest-metric-box:last-child { border-bottom: none; }
+      .latest-metric-num { font-size: 44px; }
+      .latest-standout-row { flex-direction: column; gap: 12px; }
+      .trends-blockers-grid { grid-template-columns: 1fr; gap: 40px; }
       .stats-grid { grid-template-columns: repeat(2,1fr); }
       .stats-grid .stat-card:last-child { grid-column: span 2; }
       .perf-grid, .insights-grid, .actions-grid { grid-template-columns: 1fr; }
@@ -703,6 +741,116 @@
         <div class="stat-number">24%</div>
         <div class="stat-label">AU Demo Conversion</div>
         <div class="stat-sub">From connected AU calls</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Week Snapshot -->
+  <section class="latest-week-section">
+    <div class="section-inner">
+      <div class="latest-week-badge">Latest &nbsp;·&nbsp; Week of 18 Jun 2026</div>
+      <h2 class="latest-week-title">Latest Week Report</h2>
+      <p class="latest-week-date">12–18 Jun 2026 &nbsp;·&nbsp; 2026 H2</p>
+
+      <div class="latest-week-card reveal">
+        <div class="latest-metrics-row">
+          <div class="latest-metric-box">
+            <div class="latest-metric-num">86</div>
+            <div class="latest-metric-lbl">Calls Made</div>
+          </div>
+          <div class="latest-metric-box">
+            <div class="latest-metric-num">44</div>
+            <div class="latest-metric-lbl">Connected</div>
+            <div class="latest-metric-sub">51% connect rate — programme high</div>
+          </div>
+          <div class="latest-metric-box">
+            <div class="latest-metric-num">4</div>
+            <div class="latest-metric-lbl">Appointments Set</div>
+            <div class="latest-metric-sub">4.7% conv. rate</div>
+          </div>
+        </div>
+        <div class="latest-standout-row">
+          <div class="latest-standout-left">
+            <div class="latest-standout-label">Standout</div>
+            <div class="latest-standout-text">Dawson &amp; Partners (2,800+ clients, strong interest in Tax Pay, existing APC relationship) &nbsp;·&nbsp; First full week of clean HubSpot outcome tracking &nbsp;·&nbsp; 51% connection rate — highest in the programme so far</div>
+          </div>
+          <a class="latest-view-link" onclick="document.getElementById('programme-table').scrollIntoView({behavior:'smooth'})">View in full weekly table ↓</a>
+        </div>
+      </div>
+
+      <!-- Key Trends & Recurring Blockers -->
+      <div class="trends-blockers-grid">
+        <div class="reveal">
+          <div class="trends-col-title">What the Data Is Telling Us</div>
+
+          <div class="trend-item">
+            <div class="trend-num">↑</div>
+            <div>
+              <div class="trend-title">Connection rate is climbing</div>
+              <div class="trend-desc">36% in Week 3 → 51% in Week 4. APC contacts are higher-quality leads — smaller, more accessible firms with direct mobile numbers. The dataset is working.</div>
+            </div>
+          </div>
+
+          <div class="trend-item">
+            <div class="trend-num">★</div>
+            <div>
+              <div class="trend-title">APC outperforms ABE on conversion</div>
+              <div class="trend-desc">5 of 7 June appointments came from APC data. APC firms are actively switching from Xero/MYOB — they are in-market now, making outreach timing ideal.</div>
+            </div>
+          </div>
+
+          <div class="trend-item">
+            <div class="trend-num">♻</div>
+            <div>
+              <div class="trend-title">Warm pipeline is real and growing</div>
+              <div class="trend-desc">3 "interested, not now" contacts from Week 4, plus 18 ABE deferrals still warm. These are timing-only holds — not lost leads. Follow-up cadence will determine conversion.</div>
+            </div>
+          </div>
+
+          <div class="trend-item">
+            <div class="trend-num">?</div>
+            <div>
+              <div class="trend-title">Demo-to-meeting conversion unconfirmed</div>
+              <div class="trend-desc">16 total appointments booked across the programme. Whether any converted to sales meetings remains unconfirmed — this gap is masking the true pipeline value.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-d1">
+          <div class="trends-col-title">Recurring Blockers</div>
+
+          <div class="blocker-item">
+            <div class="blocker-icon">⚠️</div>
+            <div>
+              <div class="blocker-title">Data pool nearly exhausted</div>
+              <div class="blocker-desc">74 of 142 APC + ABE contacts available to call (ABE: 43/102; APC: 31/42). At current pace, the pool stalls within 1–2 weeks. New verified data is the single biggest unlock for continuity.</div>
+            </div>
+          </div>
+
+          <div class="blocker-item">
+            <div class="blocker-icon">❌</div>
+            <div>
+              <div class="blocker-title">Wrong contact info wasting call time</div>
+              <div class="blocker-desc">12 bad records surfaced in Week 4 alone — revisited unqualified contacts with incorrect mobiles. These reduce effective reach and cost SDR time that should be on live prospects.</div>
+            </div>
+          </div>
+
+          <div class="blocker-item">
+            <div class="blocker-icon">⏸️</div>
+            <div>
+              <div class="blocker-title">US campaign stalled since April</div>
+              <div class="blocker-desc">No calls since April. Script lacks US proof points, next list unconfirmed. Every week of inaction widens the gap to restarting momentum — needs a decision and a confirmed list to unblock.</div>
+            </div>
+          </div>
+
+          <div class="blocker-item">
+            <div class="blocker-icon">📋</div>
+            <div>
+              <div class="blocker-title">Objection capture inconsistent</div>
+              <div class="blocker-desc">Not all objections are being logged in HubSpot. Without consistent capture there is no feedback loop to improve the script — patterns stay invisible and the same objections recur.</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -952,7 +1100,7 @@
   <section class="table-section">
     <div class="section-inner">
       <p class="section-overline dark-text">Full Breakdown</p>
-      <h2 class="section-heading dark-text" style="margin-bottom:0;">Program Totals</h2>
+      <h2 class="section-heading dark-text" style="margin-bottom:0;" id="programme-table">Program Totals</h2>
       <p style="font-size:13px;color:rgba(34,31,32,0.45);margin-top:8px;">Inception to 18 June 2026</p>
       <div class="table-scroll reveal">
         <table class="report-table">
